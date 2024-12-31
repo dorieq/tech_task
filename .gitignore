@@ -1,0 +1,106 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.manifest
+*.spec
+
+# Django
+*.db
+*.sqlite3
+*.sqlite
+*.log
+*.pot
+*.py,cover
+*.pid
+*.swp
+*.swo
+*.env
+*.envrc
+*.DS_Store
+*.lock
+*.bak
+local_settings.py
+instance/
+.idea/
+.vscode/
+*.orig
+
+# Migrations
+*/migrations/__pycache__/
+*/migrations/*.pyc
+*/migrations/*.pyo
+*/migrations/*.pyd
+*/migrations/*.bak
+
+# Logs
+logs/
+*.log
+*.out
+*.err
+
+# Static and Media
+/static/
+media/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Caches and Temp
+.cache/
+*.mo
+*.pyo
+*.tmp
+__pycache__/
+*.coverage
+.coverage.*
+*.tox
+.tox/
+.coverage
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.tox/
+.pytest_cache/
+
+# Redis
+dump.rdb
+redis.conf
+
+# Virtual Environment
+venv/
+env/
+ENV/
+*.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Secrets and Credentials
+.env
+*.pem
+*.key
+
+# Deployment
+*.tar.gz
+*.whl
+*.zip
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Docker
+docker-compose.override.yml
+docker-compose.yml
+.dockerignore
