@@ -7,6 +7,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 
 from .models import Task
 from .serializer import TaskSerializer
@@ -37,20 +40,17 @@ class TaskViewSet(viewsets.ModelViewSet):
         cache.delete('tasks_list')  # Clear cache after creating task
 
     def perform_update(self, serializer):
-        serializer.save()
+        task = serializer.save()
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'tasks',
+            {
+                'type': 'task_update',
+                'message': f'Task "{task.title}" status updated to {task.status}'
+            }
+        )
         cache.delete('tasks_list')  # Clear cache after updating task
 
     def perform_destroy(self, instance):
         instance.delete()
         cache.delete('tasks_list')  # Clear cache after deleting task
-
-    @action(detail=True, methods=['put'])
-    def update_status(self, request, pk=None):
-        task = self.get_object()
-        task.status = request.data.get('status', task.status)
-        task.save()
-        cache.delete('tasks_list')  # Clear cache after status update
-        return Response(
-            {'status': 'Task updated'}, 
-            status=status.HTTP_200_OK
-        )

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
+    'channels',
     
     # Custom apps
     'order',
@@ -76,6 +77,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tech.wsgi.application'
+
+ASGI_APPLICATION = 'tech.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
