@@ -1,0 +1,55 @@
+name: Run Django Tests
+
+on:
+  push:
+    branches:
+      - master
+      - 'feature/*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install Dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+        pip install django-redis  # Ensure Redis integration package is installed
+
+    - name: Set up Django Environment
+      run: |
+        cp .env.ci .env  # Use a dedicated CI environment file if necessary
+        python manage.py collectstatic --noinput
+        python manage.py migrate
+
+    - name: Run Tests
+      env:
+        REDIS_HOST: 127.0.0.1
+        REDIS_PORT: 6379
+      run: |
+        source venv/bin/activate
+        python manage.py test
