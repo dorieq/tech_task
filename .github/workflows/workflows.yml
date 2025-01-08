@@ -32,7 +32,13 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.12'
-
+    - name: Create .env file for CI
+      run: |
+          echo "DEBUG=False" >> .env.ci
+          echo "DATABASE_URL=sqlite:///ci-db.sqlite3" >> .env.ci
+          echo "REDIS_HOST=localhost" >> .env.ci
+          echo "REDIS_PORT=6379" >> .env.ci
+          echo "SECRET_KEY=test-secret" >> .env.ci
     - name: Install Dependencies
       run: |
         python -m venv venv
